@@ -1,35 +1,73 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { tabs } from "@/constants/data";
+import { Tabs } from "expo-router";
+import { Image, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import clsx from "clsx";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const TabLayout = () => {
+  const insets = useSafeAreaInsets();
+  const TabIcon = ({ focused, icon, width, height }: TabIconProps) => (
+    <View className="tabs-icon">
+      <View className={clsx("tabs-pill", focused && "tabs-active")}>
+        <Image
+          source={icon}
+          style={{ width, height }}
+          resizeMode="contain"
+          className="tabs-glyph"
+        />
+      </View>
+    </View>
+  );
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 0,
+          height: 22 + 40 + insets.bottom,
+          // Cień dla iOS
+          shadowColor: "#000000",
+          shadowOffset: { width: 0, height: -1 },
+          shadowOpacity: 0.25,
+          shadowRadius: 4,
+
+          // Cień dla Androida
+          elevation: 8,
+
+          // Wymagane w React Native do poprawnego wyrenderowania cienia
+          backgroundColor: "#ffffff",
+          borderTopWidth: 0,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 20,
+        },
+        tabBarIconStyle: {
+          alignItems: "center",
+        },
+      }}
+    >
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                focused={focused}
+                icon={tab.icon}
+                width={tab.width}
+                height={tab.height}
+              />
+            ),
+          }}
+        />
+      ))}
     </Tabs>
   );
-}
+};
+
+export default TabLayout;
