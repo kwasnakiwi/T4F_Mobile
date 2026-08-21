@@ -13,4 +13,24 @@ declare global {
     width: number;
     height: number;
   }
+  interface AppHeaderProps {
+    title: string;
+  }
+
+  interface MacrosListElementProps {
+    name: string;
+    current: number;
+    total: number;
+    icon: ImageSourcePropType;
+  }
+
+  interface MealProps {
+    name: string
+  }
+
+  interface HomePageMealProps {
+    name: string;
+    data: MealProps[] | null;
+    icon: ImageSourcePropType;
+  }
 }

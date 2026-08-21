@@ -1,13 +1,146 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
- 
+
 @import "nativewind/theme";
 
-@theme{
- --color-primary: #E54500;
+@theme {
+  --color-primary: #e54500;
+  --color-header: #07253b;
+  --color-header-panel: rgba(255, 255, 255, 0.16);
+  --color-white-80: rgba(255, 255, 255, 0.8);
+  --color-white-45: rgba(255, 255, 255, 0.45);
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-15: rgba(255, 255, 255, 0.15);
+  --color-white-12: rgba(255, 255, 255, 0.12);
+  --color-primary-text: #e96d00;
+  --color-app-background: #fdf4ee;
+  --color-progress-bg: #8e003725;
+  --color-muted: #6b7280;
+  --color-muted-more: #9ca3af;
+
+  --font-sans: "sans-regular";
+  --font-light: "sans-light";
+  --font-medium: "sans-medium";
+  --font-semibold: "sans-semibold";
+  --font-bold: "sans-bold";
+  --font-extrabold: "sans-extrabold";
 }
 
 @layer components {
-
+  .tabs-pill {
+    @apply size-12 p-2 rounded-full bg-transparent items-center justify-center;
+  }
+  .tabs-active {
+    @apply bg-primary;
+  }
+  .app-header-wrapper {
+    @apply bg-header box-border px-2.5 pb-2.5 rounded-b-[8];
+  }
+  .app-header-panel {
+    @apply bg-header-panel p-2.5 rounded-[8];
+  }
+  .app-header-row {
+    @apply flex-row justify-between items-center py-5 pb-1;
+  }
+  .app-header-title {
+    @apply text-white font-medium;
+  }
+  .app-header-desc {
+    @apply font-extralight text-white text-xs;
+  }
+  .orange-text {
+    @apply text-primary-text font-normal;
+  }
+  .app-header-date {
+    @apply text-white font-medium text-xs;
+  }
+  .app-header-date-row {
+    @apply flex-row justify-between items-center mb-1 py-2;
+  }
+  .angle-open {
+    @apply rotate-180;
+  }
+  .app-header-selected-day {
+    @apply bg-primary;
+  }
+  .app-header-days {
+    @apply flex-row justify-around;
+  }
+  .app-header-day {
+    @apply flex-col items-center box-border w-[37];
+  }
+  .day-name {
+    @apply text-white-45 text-[10px];
+  }
+  .day-number {
+    @apply font-medium text-white text-[16px];
+  }
+  .home-page-container {
+    @apply bg-app-background min-h-screen;
+  }
+  .app-wrapper {
+    @apply p-2.5;
+  }
+  .default-panel {
+    @apply bg-white p-2.5 rounded-[14];
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25);
+  }
+  .home-page-row {
+    @apply flex-row justify-between items-center gap-3 w-full;
+  }
+  .hp-macros-list {
+    @apply flex-1 flex-col justify-between;
+  }
+  .hp-macros-element {
+    @apply relative flex-1 flex-row items-center gap-2.5 p-2 mb-1.5 rounded-[5] py-1.5;
+  }
+  .hp-macros-element-content {
+    @apply flex-1 w-full justify-center;
+  }
+  .hp-macros-element-name {
+    @apply text-[11px] text-muted font-normal mb-0.5;
+  }
+  .hp-macros-element-amount {
+    @apply absolute top-0 right-0 text-muted-more font-light text-[10px];
+  }
+  .hp-macros-element-progress-wrapper {
+    @apply h-1 w-full bg-progress-bg rounded-full overflow-hidden mt-0.5;
+  }
+  .hp-macros-element-progress {
+    @apply h-full bg-primary rounded-full;
+  }
+  .add-meal {
+    @apply rounded-[9] bg-primary py-1.25 flex justify-center items-center;
+  }
+  .add-meal-plus {
+    @apply text-white font-medium text-[14px];
+  }
+  .hp-meal {
+    @apply flex-row items-center mb-2.5 gap-4 px-3 py-[10.5];
+  }
+  .home-page-meals {
+    @apply my-5;
+  }
+  .home-page-water {
+    @apply bg-header rounded-[10] py-2.5 px-3 flex-row gap-3 items-center;
+  }
+  .home-page-water-content {
+    @apply flex-1 min-w-0;
+  }
+  .home-page-water-title {
+    @apply text-white font-medium text-[12px];
+  }
+  .home-page-water-glasses {
+    @apply flex-row gap-[6.71] overflow-hidden mt-1.25 mb-3.5;
+  }
+  .home-page-water-glass {
+    @apply pt-1.25 px-[7.5] pb-1.5 rounded-sm bg-white-15;
+    &.done {
+      @apply bg-white-80;
+    }
+  }
+  .home-page-water-button {
+    @apply bg-white-12 py-1.25 flex-1 items-center w-full rounded-[7] border-[1] border-white-20 border-solid;
+  }
 }
