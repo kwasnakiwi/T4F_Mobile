@@ -1,12 +1,6 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-interface HomePageMealProps {
-  name: string;
-  data?: any;
-  icon: any;
-}
-
 const HomePageMeal: React.FC<HomePageMealProps> = ({ name, data, icon }) => {
   return (
     <View className="default-panel hp-meal">
