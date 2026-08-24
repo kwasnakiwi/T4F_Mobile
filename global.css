@@ -229,6 +229,6 @@
     @apply bg-primary w-[21] h-[21] items-center justify-center rounded-[6];
   }
   .ap-product {
-    @apply flex-row items-center justify-between mb-2.5 pb-2 border-b border-solid border-b-muted-more-25;
+    @apply flex flex-row items-center justify-between mb-2.5 pb-2 border-b border-solid border-b-muted-more-25;
   }
 }
