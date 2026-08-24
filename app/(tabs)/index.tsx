@@ -1,11 +1,11 @@
 import { macros, mealTypes } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { Link } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import AppHeader from "../components/AppHeader";
 import DynamicProgressGauge from "../components/DynamicProgressGauge";
-import HomePageMeal from "../components/HomePageMeal";
+import HomePageMealComponent from "../components/HomePageMeal";
 import MacrosListElement from "../components/MacrosListElement";
 import WaterProgressCircle from "../components/WaterProgressCircle";
 
@@ -14,9 +14,21 @@ export default function Index() {
   const totalGlasses = 8;
   const [currentGlasses, setCurrentGlasses] = useState<number>(2);
 
+  const [openMeals, setOpenMeals] = useState<HomePageMeal[]>([]);
+
+  const handleToggleMeal = (meal: HomePageMeal) => {
+    setOpenMeals((prev) => {
+      const exists = prev.some((m) => m.name === meal.name);
+      if (exists) {
+        return prev.filter((m) => m.name !== meal.name);
+      } else {
+        return [...prev, meal];
+      }
+    });
+  };
+
   return (
     <View className="bg-app-background flex-1">
-      <AppHeader title="Home" />
       <FlatList
         data={[]}
         renderItem={null}
@@ -43,16 +55,23 @@ export default function Index() {
                 ))}
               </View>
             </View>
+
             <View className="home-page-meals">
-              {mealTypes.map((item, i) => (
-                <HomePageMeal
-                  key={i}
-                  name={item.name}
-                  data={item.data}
-                  icon={item.icon}
-                />
-              ))}
+              {mealTypes.map((item) => {
+                const isOpened = openMeals.some((m) => m.name === item.name);
+                return (
+                  <HomePageMealComponent
+                    key={item.name}
+                    name={item.name}
+                    data={item.data}
+                    icon={item.icon}
+                    isOpen={isOpened}
+                    onPress={() => handleToggleMeal(item)}
+                  />
+                );
+              })}
             </View>
+
             <View className="home-page-water">
               <WaterProgressCircle
                 label="Woda"

@@ -24,13 +24,53 @@ declare global {
     icon: ImageSourcePropType;
   }
 
-  interface MealProps {
-    name: string
+  interface Meal {
+    name: string;
+    weight: number;
+    kcal: number;
+  }
+
+  interface Macro {
+    label: string;
+    amount: number;
+    unit: string;
+    color: string;
+  }
+
+  interface HomePageMeal {
+    name: string;
+    data: {
+      totalKcal: number;
+      meals: Meal[];
+      macros: Macro[];
+    };
   }
 
   interface HomePageMealProps {
     name: string;
-    data: MealProps[] | null;
+    data: any;
     icon: ImageSourcePropType;
+    isOpen?: boolean;
+    onPress?: () => void;
+  }
+
+  interface Product {
+    id: number;
+    name: string;
+    title: string;
+    brand?: string;
+    image_url: string;
+    packaging: string;
+    weight_g: string;
+    kcal: string;
+    kcal_1g: string;
+    serving_unit_id?: number;
+  }
+
+  interface ProductListItemProps {
+    id: number;
+    name: string;
+    weight_g: string;
+    kcal: string;
   }
 }
