@@ -1,6 +1,11 @@
 import addProduct from "@/assets/icons/addProduct.png";
 import angleDown from "@/assets/icons/angleDown.png";
+import authLock from "@/assets/icons/authLock.png";
+import authMail from "@/assets/icons/authMail.png";
+import authPerson from "@/assets/icons/authPerson.png";
 import bell from "@/assets/icons/bell.png";
+import bigCheck from "@/assets/icons/bigCheck.png";
+import bigEnvelope from "@/assets/icons/bigEnvelope.png";
 import breakfast from "@/assets/icons/breakfast.png";
 import carbohydrates from "@/assets/icons/carbohydrates.png";
 import dessert from "@/assets/icons/dessert.png";
@@ -21,6 +26,7 @@ import tabImage from "@/assets/icons/tabImage.png";
 import tabPerson from "@/assets/icons/tabPerson.png";
 import tabPlus from "@/assets/icons/tabPlus.png";
 import tabTrophy from "@/assets/icons/tabTrophy.png";
+import visibilitySlash from "@/assets/icons/visibilitySlash.png";
 
 export const icons = {
   tabHome,
@@ -46,4 +52,10 @@ export const icons = {
   scanBarcode,
   addProduct,
   search,
+  authMail,
+  authLock,
+  visibilitySlash,
+  authPerson,
+  bigEnvelope,
+  bigCheck,
 } as const;

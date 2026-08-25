@@ -9,6 +9,7 @@
   --color-primary-12: #e545001f;
   --color-primary-20: #e5450033;
   --color-primary-25: #e5450040;
+  --color-not-white: #e0e5eb;
   --color-header: #07253b;
   --color-header-panel: rgba(255, 255, 255, 0.16);
   --color-white-80: rgba(255, 255, 255, 0.8);
@@ -27,7 +28,10 @@
   --color-light-grey: #f9fafb;
   --color-secondary: #0d1b2e;
   --color-grey-muted: #f2f4f7;
-  --color-grey-secondary: #aab4bf --font-sans: "sans";
+  --color-grey-secondary: #aab4bf;
+  --color-disabled: #e8ecf0;
+
+  --font-sans: "sans";
   --font-light: "light";
   --font-medium: "medium";
   --font-semibold: "semibold";
@@ -230,5 +234,66 @@
   }
   .ap-product {
     @apply flex flex-row items-center justify-between mb-2.5 pb-2 border-b border-solid border-b-muted-more-25;
+  }
+  .orange-bold {
+    @apply text-primary-text font-bold;
+  }
+  .logo-text {
+    @apply font-bold text-[20px] text-white;
+  }
+  .app-sign-in-top {
+    @apply flex-col justify-center items-center pb-9;
+  }
+  .logo-placeholder {
+    @apply w-14 h-14 rounded-2xl bg-primary-text mt-3 mb-1;
+  }
+  .logo-desc {
+    @apply font-light text-[12px] text-white-45;
+  }
+  .auth-top-text {
+    @apply font-bold text-[26px] text-secondary;
+  }
+  .auth-top-text-under {
+    @apply font-light text-[14px] text-tint mt-1 mb-6;
+  }
+  .auth-input-box {
+    @apply flex-col gap-y-1 relative mb-4;
+  }
+  .auth-input-box-label {
+    @apply text-tint font-medium text-[14px];
+  }
+  .auth-input {
+    @apply py-[15.5] border border-not-white border-solid rounded-[14] pr-4
+    text-[14px];
+  }
+  .auth-input-icon {
+    @apply absolute left-4 top-[50%] translate-y-[-50%];
+    &.visibility-icon {
+      @apply right-4 left-auto;
+    }
+  }
+  .auth-under-form-text {
+    @apply text-[14px] text-primary-text text-right font-medium mb-6;
+  }
+  .auth-buttons {
+    @apply p-[9] gap-y-7.5;
+  }
+  .auth-button {
+    @apply bg-primary-text py-[15.5] rounded-[14];
+  }
+  .auth-or-component {
+    @apply text-grey-secondary text-[12px] text-center;
+  }
+  .auth-or-component-line {
+    @apply h-[1] w-full flex-1 bg-disabled;
+  }
+  .auth-google-button {
+    @apply bg-white py-[15.5] rounded-[14] border border-solid border-disabled;
+  }
+  .password-requirements {
+    @apply bg-[#F8F9FB] p-4 rounded-[14];
+  }
+  .auth-image-wrapper {
+    @apply bg-secondary-bg w-20 h-20 rounded-full justify-center items-center;
   }
 }

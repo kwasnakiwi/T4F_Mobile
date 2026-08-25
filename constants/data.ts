@@ -143,3 +143,9 @@ export const addProductsPageButtons = [
   },
   { label: "Utwórz", icon: icons.addProduct, link: "/" },
 ];
+
+export const passwordRequirements = [
+  "Co najmniej 8 znaków",
+  "Co najmniej jedna wielka litera",
+  "Co najmniej jedna cyfra",
+]

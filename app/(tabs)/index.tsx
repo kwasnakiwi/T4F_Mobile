@@ -13,7 +13,6 @@ export default function Index() {
   const tabBarHeight = useBottomTabBarHeight();
   const totalGlasses = 8;
   const [currentGlasses, setCurrentGlasses] = useState<number>(2);
-
   const [openMeals, setOpenMeals] = useState<HomePageMeal[]>([]);
 
   const handleToggleMeal = (meal: HomePageMeal) => {
@@ -109,6 +108,7 @@ export default function Index() {
                 </TouchableOpacity>
               </View>
             </View>
+            <Link href="/(auth)/sign-in">Logowanie</Link>
           </>
         }
       />

@@ -66,13 +66,38 @@ const AppHeader = () => {
   const title = getHeaderTitle();
   const scanning = lastSegment === "scan-bar-code";
   const isHome = title === "Home";
-  const isSubpage = !isHome && !scanning;
+  const isSignIn = title === "Sign in";
+  const isSignUp = title === "Sign up";
+  const is2fa = title === "2fa";
+  const isForgotPassword = title === "Forgot password";
+  const isCreateNewPassword = title === "Create new password";
+  const isForgotPassword2 = title === "Forgot password got email";
+  const isPasswordChanged = title === "Password changed";
+  const isSubpage =
+    !isHome &&
+    !scanning &&
+    !isSignIn &&
+    !isSignUp &&
+    !is2fa &&
+    !isForgotPassword &&
+    !isCreateNewPassword &&
+    !isForgotPassword2 &&
+    !isPasswordChanged;
 
   return (
     <View
       className={clsx(
         "app-header-wrapper",
-        scanning || (isSubpage && "no-radius"),
+        (scanning ||
+          isSubpage ||
+          isSignIn ||
+          isSignUp ||
+          is2fa ||
+          isForgotPassword ||
+          isCreateNewPassword ||
+          isForgotPassword2 ||
+          isPasswordChanged) &&
+          "no-radius",
       )}
       style={{ paddingTop: insets.top }}
     >
@@ -145,6 +170,19 @@ const AppHeader = () => {
                 <Text className="day-number">{day.dayNumber}</Text>
               </TouchableOpacity>
             ))}
+          </View>
+        </>
+      )}
+      {isSignIn && (
+        <>
+          <View className="app-sign-in-top">
+            <View className="logo-placeholder" />
+            <Text className="logo-text">
+              Time <Text className="orange-bold">4</Text> Fit
+            </Text>
+            <Text className="logo-desc">
+              Jedno miejsce. Cały Twój aktywny styl życia
+            </Text>
           </View>
         </>
       )}
