@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "T4F_Mobile",
-    "slug": "T4F_Mobile",
+    "name": "Time4Fit",
+    "slug": "time4Fit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,12 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.kwasnakiwi.T4F_Mobile"
     },
     "web": {
       "output": "static",
@@ -51,6 +56,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2625ad03-2f29-4c0f-ad05-686a37e8988d"
+      }
     }
   }
 }
