@@ -29,3 +29,14 @@ export const formatDate = (date: Date | string): string => {
 
   return `${day.toString().padStart(2, "0")}.${month.toString().padStart(2, "0")}.${year}`;
 };
+
+export const formatDate2 = (date: Date | string): string => {
+  const formattedDate = new Date(date);
+  const day = formattedDate.getDate();
+  const month = formattedDate.getMonth() + 1;
+  const year = formattedDate.getFullYear();
+
+  return `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+};
+
+export const BASE_URL = "https://time4.fit/api/v1/";

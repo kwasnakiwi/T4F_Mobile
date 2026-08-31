@@ -296,4 +296,212 @@
   .auth-image-wrapper {
     @apply bg-secondary-bg w-20 h-20 rounded-full justify-center items-center;
   }
+  .add-product-container {
+    @apply flex-1 bg-app-background px-4 pt-3;
+  }
+  .product-screen-container {
+    @apply flex-1 bg-app-background;
+  }
+
+  /* Nagłówek ciemny z kartą produktu */
+  .product-header-card {
+    @apply bg-header p-5 rounded-b-[32px] mb-3 shadow-md;
+  }
+
+  .product-header-top {
+    @apply flex-row justify-between items-start mb-2;
+  }
+
+  .product-header-brand {
+    @apply text-white-45 text-xs font-medium mb-1;
+  }
+
+  .product-header-title {
+    @apply text-white text-xl font-bold max-w-[70%];
+  }
+
+  .product-header-portion {
+    @apply text-white-45 text-xs font-medium mt-1;
+  }
+
+  .product-kcal-box {
+    @apply bg-white/10 border border-white/20 rounded-2xl px-4 py-2 items-center justify-center;
+  }
+
+  .product-kcal-val {
+    @apply text-white font-extrabold text-2xl leading-none;
+  }
+
+  .product-kcal-unit {
+    @apply text-white-45 text-[10px] font-bold mt-0.5;
+  }
+
+  /* Siatka 4 makro w nagłówku */
+  .product-header-macro-grid {
+    @apply flex-row justify-between gap-1.5 mt-4;
+  }
+
+  .product-header-macro-pill {
+    @apply flex-1 bg-white/10 border border-white/15 rounded-2xl py-2 px-1 items-center justify-center;
+  }
+
+  .product-header-macro-val {
+    @apply text-white font-bold text-sm;
+  }
+
+  .product-header-macro-unit {
+    @apply text-white-80 text-[10px] font-normal;
+  }
+
+  .product-header-macro-label {
+    @apply text-white-45 text-[10px] font-medium mt-0.5;
+  }
+
+  /* Link do zgłaszania błędu */
+  .product-report-link {
+    @apply text-primary font-bold text-xs px-5 mb-4 underline;
+  }
+
+  /* Karty sekcji */
+  .product-card {
+    @apply bg-white rounded-3xl p-4 mx-4 mb-3 shadow-sm border border-gray-100/80;
+  }
+
+  .product-card-title {
+    @apply font-bold text-sm text-header mb-3;
+  }
+
+  /* Tagi i czipy */
+  .product-chip-row {
+    @apply flex-row flex-wrap gap-2;
+  }
+
+  .product-chip {
+    @apply bg-gray-100 px-3 py-1.5 rounded-full;
+  }
+
+  .product-chip-text {
+    @apply text-muted text-xs font-medium;
+  }
+
+  /* Opinia Time4Fit */
+  .product-opinion-header {
+    @apply flex-row justify-between items-center mb-3;
+  }
+
+  .product-opinion-badge {
+    @apply bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full;
+  }
+
+  .product-opinion-badge-text {
+    @apply text-emerald-700 text-xs font-bold;
+  }
+
+  .product-opinion-desc {
+    @apply text-muted text-xs leading-relaxed mb-4;
+  }
+
+  /* Nutri-Score & NOVA */
+  .product-scores-row {
+    @apply flex-row justify-between items-center pt-2 border-t border-gray-100;
+  }
+
+  .product-score-col {
+    @apply flex-1;
+  }
+
+  .product-score-label {
+    @apply text-muted text-[11px] font-medium mb-1.5;
+  }
+
+  .product-nutri-bar {
+    @apply flex-row rounded-md overflow-hidden w-28 h-5;
+  }
+
+  .product-nutri-step {
+    @apply flex-1 items-center justify-center;
+  }
+
+  .product-nutri-text {
+    @apply text-[10px] font-bold text-white;
+  }
+
+  .product-nova-tag {
+    @apply bg-red-50 border border-red-200 px-2 py-0.5 rounded-md self-start;
+  }
+
+  .product-nova-text {
+    @apply text-red-600 font-bold text-[10px];
+  }
+
+  /* Rozwijana sekcja Szczegóły Produktu */
+  .product-accordion-btn {
+    @apply bg-white py-3.5 px-5 mx-4 rounded-2xl flex-row justify-between items-center mb-3 border border-gray-100 shadow-sm;
+  }
+
+  .product-accordion-title {
+    @apply font-bold text-sm text-header;
+  }
+
+  /* Listy wartości w szczegółach */
+  .product-detail-row {
+    @apply flex-row justify-between py-2 border-b border-gray-50;
+  }
+
+  .product-detail-label {
+    @apply text-muted text-xs font-medium;
+  }
+
+  .product-detail-value {
+    @apply text-header font-bold text-xs;
+  }
+
+  .product-allergen-chip {
+    @apply bg-red-50 border border-red-200 px-3 py-1 rounded-full self-start my-1;
+  }
+
+  .product-allergen-text {
+    @apply text-red-500 font-medium text-xs;
+  }
+
+  .product-warning-box {
+    @apply bg-amber-50/80 border border-amber-200 p-2.5 rounded-xl mt-2;
+  }
+
+  .product-warning-text {
+    @apply text-amber-800 text-xs font-medium;
+  }
+
+  .product-rating-badge {
+    @apply px-2 py-0.5 rounded-md text-[11px] font-bold;
+  }
+
+  /* Dolny pasek ze sterowaniem ilością i przyciskiem */
+  .product-bottom-sticky {
+    @apply bg-white border-t border-gray-100 px-4 pt-3 pb-6 shadow-lg;
+  }
+
+  .product-submit-btn {
+    @apply bg-primary py-3.5 rounded-2xl items-center justify-center mb-3 shadow-md active:opacity-90;
+  }
+
+  .product-submit-btn-text {
+    @apply text-white font-bold text-base;
+  }
+
+  .product-controls-row {
+    @apply flex-row gap-2 items-center;
+  }
+
+  .product-qty-input {
+    @apply bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-center font-bold text-base text-header w-16;
+  }
+
+  .product-unit-select {
+    @apply flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 flex-row justify-between items-center;
+  }
+
+  .product-unit-select-text {
+    @apply font-bold text-xs text-header;
+  }
 }

@@ -1,5 +1,5 @@
 import { icons } from "@/constants/icons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -10,10 +10,45 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BASE_URL } from "../lib/utils";
 
 const ForgotPassword = () => {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleResetPassword = async () => {
+    if (!email) return;
+
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}user/reset_password/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.non_field_errors[0] || data.message);
+      }
+
+      router.push({
+        pathname: "/(auth)/2fa",
+        params: {
+          challenge_id: data.challenge_id,
+          purpose: data.purpose,
+        },
+      });
+
+      console.log("Zalogowano:", data);
+    } catch (err) {
+      console.error("Błąd logowania:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View className="bg-white flex-1">
@@ -50,6 +85,7 @@ const ForgotPassword = () => {
                   email.length < 6 ? "opacity-50" : "opacity-100"
                 }`}
                 disabled={email.length < 6}
+                onPress={handleResetPassword}
               >
                 <Text className="font-bold text-[16px] text-white text-center">
                   Potwierdź

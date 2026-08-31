@@ -141,11 +141,11 @@ export const addProductsPageButtons = [
     icon: icons.scanBarcode,
     link: "/(add-product)/scan-bar-code",
   },
-  { label: "Utwórz", icon: icons.addProduct, link: "/" },
+  { label: "Utwórz", icon: icons.addProduct, link: "/(tabs)" },
 ];
 
 export const passwordRequirements = [
   "Co najmniej 8 znaków",
   "Co najmniej jedna wielka litera",
   "Co najmniej jedna cyfra",
-]
+];

@@ -45,7 +45,8 @@
           "cameraPermission": "Aplikacja potrzebuje dostępu do kamery, aby skanować kody kreskowe produktów."
         }
       ],
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

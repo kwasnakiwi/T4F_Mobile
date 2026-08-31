@@ -1,6 +1,6 @@
 import { passwordRequirements } from "@/constants/data";
 import { icons } from "@/constants/icons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BASE_URL } from "../lib/utils";
 
 const SignUp = () => {
   const insets = useSafeAreaInsets();
@@ -20,9 +21,47 @@ const SignUp = () => {
   const [repeatedPassword, setRepeatedPassword] = useState<string>("");
   const [isSecure, setIsSecure] = useState<boolean>(true);
   const [passwordInputFocus, setPasswordInputFocus] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSecure = () => {
     setIsSecure((prev) => !prev);
+  };
+
+  const handleRegister = async () => {
+    if (!name || !email || !password) return;
+
+    try {
+      setIsLoading(true);
+
+      if (password !== repeatedPassword)
+        throw new Error("Hasła muszą być identyczne");
+
+      const res = await fetch(`${BASE_URL}user/register/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ first_name: name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.email || data.message);
+      }
+
+      router.push({
+        pathname: "/(auth)/2fa",
+        params: {
+          challenge_id: data.challenge_id,
+          purpose: data.purpose,
+        },
+      });
+
+      console.log("Zarejestrowano:", data);
+    } catch (err) {
+      console.error("Błąd logowania:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -115,7 +154,10 @@ const SignUp = () => {
               <Image source={icons.authLock} className="auth-input-icon" />
             </View>
             <View className="auth-buttons">
-              <TouchableOpacity className="auth-button">
+              <TouchableOpacity
+                className="auth-button"
+                onPress={handleRegister}
+              >
                 <Text className="font-bold text-[16px] text-white text-center">
                   Zarejestruj się
                 </Text>

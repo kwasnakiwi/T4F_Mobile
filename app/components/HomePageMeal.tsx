@@ -27,11 +27,9 @@ const HomePageMeal = ({
             <Text className="font-medium text-[15px] text-[#07253b]">
               {name}
             </Text>
-            {data === null && (
-              <Text className="text-muted text-[11px] font-normal">
-                Nic tu jeszcze nie ma
-              </Text>
-            )}
+            <Text className="text-muted text-[11px] font-normal">
+              {data?.meals[0]?.name || "Nic tu jeszcze nie ma"}
+            </Text>
           </View>
           {!isOpen ? (
             <TouchableOpacity
@@ -46,7 +44,7 @@ const HomePageMeal = ({
           ) : (
             <View className="flex-row gap-2 items-center">
               <Text className="hp-meal-total-kcal">
-                <Text className="font-medium">{data.totalKcal}</Text>kcal
+                <Text className="font-medium">{data?.totalKcal}</Text>kcal
               </Text>
               <Image source={icons.greyAngleUp} />
             </View>
@@ -56,7 +54,7 @@ const HomePageMeal = ({
       {isOpen && (
         <>
           <View className="hp-meal-additional-content">
-            {data.meals.map((meal: Meal, i: number) => (
+            {data?.meals.map((meal: Meal, i: number) => (
               <View key={i} className="hp-meal-additional-content-meal">
                 <View className="flex-col">
                   <Text className="text-black text-[12px]">{meal.name}</Text>
@@ -70,7 +68,7 @@ const HomePageMeal = ({
               </View>
             ))}
             <View className="flex-row justify-center gap-[12] mt-1.5 mb-3">
-              {data.macros.map((macro: Macro, i: number) => (
+              {data?.macros.map((macro: Macro, i: number) => (
                 <View key={i} className="hp-meal-additional-content-macro">
                   <Text
                     className="font-medium text-[12px]"

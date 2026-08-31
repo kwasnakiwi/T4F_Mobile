@@ -1,5 +1,6 @@
 import { passwordRequirements } from "@/constants/data";
 import { icons } from "@/constants/icons";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -10,15 +11,57 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { saveSecureItem } from "../lib/secureStore";
+import { BASE_URL } from "../lib/utils";
 
 const CreateNewPassword = () => {
   const insets = useSafeAreaInsets();
   const [password, setPassword] = useState<string>("");
   const [repeatedPassword, setRepeatedPassword] = useState<string>("");
   const [isSecure, setIsSecure] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { reset_ticket_id } = useLocalSearchParams<{
+    reset_ticket_id: string;
+  }>();
 
   const toggleSecure = () => {
     setIsSecure((prev) => !prev);
+  };
+
+  const handleCreateNewPassword = async () => {
+    if (!password || !repeatedPassword) return;
+
+    try {
+      setIsLoading(true);
+
+      if (password !== repeatedPassword)
+        throw new Error("Hasła muszą być identyczne");
+
+      const res = await fetch(`${BASE_URL}user/reset-password/confirm/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reset_ticket_id, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.email || data.message);
+      }
+
+      await saveSecureItem("refresh_token", data.refresh);
+      await saveSecureItem("access_token", data.access);
+
+      router.push({
+        pathname: "/(auth)/password-changed",
+      });
+
+      console.log("Zarejestrowano:", data);
+    } catch (err) {
+      console.error("Błąd logowania:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -85,7 +128,10 @@ const CreateNewPassword = () => {
               ))}
             </View>
             <View className="auth-buttons">
-              <TouchableOpacity className="auth-button">
+              <TouchableOpacity
+                className="auth-button"
+                onPress={handleCreateNewPassword}
+              >
                 <Text className="font-bold text-[16px] text-white text-center">
                   Zmień hasło
                 </Text>

@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import {
   FlatList,
@@ -9,6 +9,8 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { saveSecureItem } from "../lib/secureStore";
+import { BASE_URL } from "../lib/utils";
 
 const OTP_LENGTH = 6;
 
@@ -32,11 +34,8 @@ const OtpInput = ({
       <TextInput
         ref={inputRef}
         value={code}
-        onChangeText={(text) =>
-          setCode(text.replace(/[^0-9]/g, "").slice(0, OTP_LENGTH))
-        }
+        onChangeText={setCode}
         maxLength={OTP_LENGTH}
-        keyboardType="number-pad"
         textContentType="oneTimeCode"
         autoFocus
         className="absolute w-full h-full opacity-0 z-10"
@@ -74,6 +73,49 @@ const OtpInput = ({
 const TwoFA = () => {
   const insets = useSafeAreaInsets();
   const [code, setCode] = useState<string>("");
+  const { challenge_id, purpose, dev_code } = useLocalSearchParams<{
+    challenge_id: string;
+    purpose: string;
+    dev_code?: string;
+  }>();
+
+  const handleOtpVerify = async () => {
+    if (!code) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}user/otp_verify/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          challenge_id,
+          purpose,
+          code: dev_code ? dev_code : code,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(JSON.stringify(data));
+      }
+
+      if (purpose === "reset_password") {
+        console.log("data:", data);
+        router.push({
+          pathname: "/(auth)/create-new-password",
+          params: { reset_ticket_id: data.reset_ticket_id },
+        });
+      } else {
+        console.log("data:", data);
+        await saveSecureItem("refresh_token", data.refresh);
+        await saveSecureItem("access_token", data.access);
+
+        router.replace("/(tabs)");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <View className="bg-white flex-1">
@@ -105,6 +147,7 @@ const TwoFA = () => {
             </TouchableOpacity>
             <View className="auth-buttons">
               <TouchableOpacity
+                onPress={handleOtpVerify}
                 className={`auth-button ${
                   code.length < 6 ? "opacity-50" : "opacity-100"
                 }`}

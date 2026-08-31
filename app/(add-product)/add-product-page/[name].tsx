@@ -2,7 +2,7 @@ import ProductsListItem from "@/app/components/ProductsListItem";
 import { addProductsPageButtons } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import clsx from "clsx";
-import { Href, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -66,7 +66,10 @@ const AddProductsPage = () => {
       <View className="add-product-buttons">
         {addProductsPageButtons.map((btn, i) => (
           <TouchableOpacity
-            onPress={() => router.push(btn.link as Href)}
+            onPress={() =>
+              // @ts-ignore
+              router.replace({ pathname: btn.link, params: { name } })
+            }
             key={i}
             className="add-product-button"
           >
@@ -125,12 +128,22 @@ const AddProductsPage = () => {
           paddingBottom: insets.bottom + 150,
         }}
         renderItem={({ item }) => (
-          <ProductsListItem
-            id={item.id}
-            name={item.name}
-            weight_g={item.weight_g}
-            kcal={item.kcal}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/(add-product)/add-product-adv",
+                params: { itemId: item.id.toString(), mealType: name },
+              })
+            }
+          >
+            <ProductsListItem
+              id={item.id}
+              name={item.name}
+              weight_g={item.weight_g}
+              kcal={item.kcal}
+              mealType={name}
+            />
+          </TouchableOpacity>
         )}
       />
     </View>
