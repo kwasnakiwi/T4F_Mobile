@@ -1,12 +1,14 @@
 import { images } from "@/constants/images";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Modal,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -19,8 +21,14 @@ export default function ScanBarcodeScreen() {
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Szukanie produktu...");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Stany dla ręcznego wpisywania kodu
+  const [isManualInputVisible, setIsManualInputVisible] = useState(false);
+  const [manualBarcode, setManualBarcode] = useState("");
+
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const isProcessingRef = useRef(false);
 
   const params = useLocalSearchParams<{
     meal_type?: string;
@@ -50,50 +58,35 @@ export default function ScanBarcodeScreen() {
     }
   }, [permission]);
 
-  const handleBarcodeScanned = async ({
-    type,
-    data,
-  }: {
-    type: string;
-    data: string;
-  }) => {
-    if (scanned || loading || errorMessage) return;
+  // Wspólna logika procesowania kodu (zarówno ze skanera, jak i wpisanego ręcznie)
+  const processBarcode = async (barcode: string) => {
+    if (isProcessingRef.current || loading) return;
 
+    isProcessingRef.current = true;
     setScanned(true);
     setLoading(true);
     setLoadingText("Szukanie produktu w bazie...");
 
     try {
-      const barcodeRes = await apiFetch(`diet/products/barcode/${data}/`);
+      const barcodeRes = await apiFetch(`diet/products/barcode/${barcode}/`);
       const productData = await barcodeRes.json();
 
       if (!barcodeRes.ok || !productData?.id) {
-        throw new Error("Nie znaleziono produktu o takim kodzie kreskowym.");
+        throw new Error(
+          "Nie znaleziono produktu o takim kodzie kreskowym. Sprawdź poprawność kodu.",
+        );
       }
 
       setLoadingText(`Dodawanie "${productData.name || productData.title}"...`);
-      const addRes = await apiFetch("diet/add-product/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      setIsManualInputVisible(false); // Zamknij modal po sukcesie
+
+      router.push({
+        pathname: "/(add-product)/add-product-adv",
+        params: {
+          barcodeProductId: productData?.id,
+          mealType: params.mealName,
         },
-        body: JSON.stringify({
-          product_id: productData.id,
-          date: currentDate,
-          meal_type: currentMealType,
-        }),
       });
-
-      const addResData = await addRes.json();
-
-      if (!addRes.ok) {
-        throw new Error(
-          addResData?.detail ||
-            addResData?.message ||
-            "Nie udało się dodać produktu do posiłku.",
-        );
-      }
-      router.back();
     } catch (error: any) {
       console.error("Błąd skanowania/dodawania:", error);
       setErrorMessage(
@@ -101,10 +94,29 @@ export default function ScanBarcodeScreen() {
       );
     } finally {
       setLoading(false);
+      isProcessingRef.current = false;
     }
   };
 
+  const handleBarcodeScanned = async ({
+    type,
+    data,
+  }: {
+    type: string;
+    data: string;
+  }) => {
+    if (errorMessage || isManualInputVisible) return;
+    await processBarcode(data);
+  };
+
+  const handleManualSubmit = () => {
+    const trimmedCode = manualBarcode.trim();
+    if (!trimmedCode) return;
+    processBarcode(trimmedCode);
+  };
+
   const handleResetScanner = () => {
+    isProcessingRef.current = false;
     setErrorMessage(null);
     setScanned(false);
   };
@@ -139,9 +151,12 @@ export default function ScanBarcodeScreen() {
             barcodeTypes: ["ean13", "ean8", "qr", "upc_a", "upc_e"],
           }}
           onBarcodeScanned={
-            scanned || errorMessage ? undefined : handleBarcodeScanned
+            scanned || errorMessage || isManualInputVisible
+              ? undefined
+              : handleBarcodeScanned
           }
         />
+
         {loading && (
           <View className="absolute inset-0 bg-black/70 justify-center items-center z-10 px-6">
             <ActivityIndicator size="large" color="#E54500" />
@@ -150,6 +165,7 @@ export default function ScanBarcodeScreen() {
             </Text>
           </View>
         )}
+
         {errorMessage && (
           <View className="absolute inset-0 bg-black/80 justify-center items-center z-20 p-6">
             <View className="bg-white p-6 rounded-2xl w-full max-w-sm items-center">
@@ -166,6 +182,7 @@ export default function ScanBarcodeScreen() {
             </View>
           </View>
         )}
+
         <View className="barcode-scan -mt-16">
           <Text className="barcode-scan-text">Ustaw kod kreskowy w kadrze</Text>
           <Image source={images.barCodeScan} />
@@ -178,10 +195,64 @@ export default function ScanBarcodeScreen() {
           className="barcode-type-code-wrapper"
           style={{ bottom: insets.bottom + 100 }}
         >
-          <TouchableOpacity className="barcode-type-code-btn">
+          <TouchableOpacity
+            className="barcode-type-code-btn"
+            onPress={() => {
+              setManualBarcode("");
+              setIsManualInputVisible(true);
+            }}
+          >
             <Text className="font-bold text-white">Wpisz kod ręcznie</Text>
           </TouchableOpacity>
         </View>
+        <Modal
+          visible={isManualInputVisible}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setIsManualInputVisible(false)}
+        >
+          <View className="flex-1 justify-center bg-black/60">
+            <View
+              className="bg-white rounded-t-3xl p-6"
+              style={{ paddingBottom: insets.bottom + 20 }}
+            >
+              <Text className="text-lg font-bold text-gray-800 mb-2">
+                Wpisz kod kreskowy
+              </Text>
+              <Text className="text-sm text-gray-500 mb-4">
+                Wprowadź ciąg cyfr umieszczony pod kodem kreskowym produktu.
+              </Text>
+
+              <TextInput
+                value={manualBarcode}
+                onChangeText={setManualBarcode}
+                placeholder="np. 5900123456789"
+                keyboardType="numeric"
+                autoFocus
+                className="border border-gray-300 rounded-xl px-4 py-3 text-base text-gray-800 mb-4"
+              />
+
+              <View className="flex-row gap-3">
+                <TouchableOpacity
+                  onPress={() => setIsManualInputVisible(false)}
+                  className="flex-1 py-3 border border-gray-300 rounded-xl items-center"
+                >
+                  <Text className="font-medium text-gray-700">Anuluj</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleManualSubmit}
+                  disabled={!manualBarcode.trim()}
+                  className={`flex-1 py-3 rounded-xl items-center ${
+                    manualBarcode.trim() ? "bg-primary" : "bg-gray-300"
+                  }`}
+                >
+                  <Text className="font-bold text-white">Szukaj</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );

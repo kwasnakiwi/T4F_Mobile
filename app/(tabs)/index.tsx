@@ -55,12 +55,10 @@ export default function Index() {
     getDailyMeals();
   }, [currentDate]);
 
-  // Podsumowanie dnia z API
   const currentKcal = Math.round(
     parseFloat(dailyMealsData?.total_day_kcal || "0"),
   );
 
-  // Górny panel makroskładników
   const formattedMacros = [
     {
       name: "Białko",

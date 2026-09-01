@@ -28,6 +28,7 @@ declare global {
     name: string;
     weight: number;
     kcal: number;
+    packaging?: string;
   }
 
   interface Macro {
@@ -74,4 +75,3 @@ declare global {
     kcal: string;
   }
 }
-

@@ -1,5 +1,4 @@
 import ProductsListItem from "@/app/components/ProductsListItem";
-import { addProductsPageButtons } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import clsx from "clsx";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -64,21 +63,34 @@ const AddProductsPage = () => {
   return (
     <View className="home-page-container px-2.5 pt-3.5 flex-1">
       <View className="add-product-buttons">
-        {addProductsPageButtons.map((btn, i) => (
-          <TouchableOpacity
-            onPress={() =>
-              // @ts-ignore
-              router.replace({ pathname: btn.link, params: { name } })
-            }
-            key={i}
-            className="add-product-button"
-          >
-            <Image source={btn.icon} />
-            <Text className="font-semibold text-secondary text-[10px]">
-              {btn.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        <TouchableOpacity
+          onPress={() =>
+            router.replace({
+              pathname: "/(add-product)/scan-bar-code",
+              params: { mealName: name },
+            })
+          }
+          className="add-product-button"
+        >
+          <Image source={icons.scanBarcode} />
+          <Text className="font-semibold text-secondary text-[10px]">
+            Skanuj kod
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            router.replace({
+              pathname: "/(tabs)",
+              params: { mealName: name },
+            })
+          }
+          className="add-product-button"
+        >
+          <Image source={icons.addProduct} />
+          <Text className="font-semibold text-secondary text-[10px]">
+            Utwórz
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View className="ap-search-input-box">
@@ -142,6 +154,7 @@ const AddProductsPage = () => {
               weight_g={item.weight_g}
               kcal={item.kcal}
               mealType={name}
+              packaging={item.packaging}
             />
           </TouchableOpacity>
         )}

@@ -305,7 +305,7 @@
 
   /* Nagłówek ciemny z kartą produktu */
   .product-header-card {
-    @apply bg-header p-5 rounded-b-[32px] mb-3 shadow-md;
+    @apply bg-header p-5 rounded-b-4xl mb-3 shadow-md;
   }
 
   .product-header-top {
@@ -503,5 +503,11 @@
 
   .product-unit-select-text {
     @apply font-bold text-xs text-header;
+  }
+  .custom-unit-inputs {
+    @apply flex-row items-center gap-1 bg-white px-2.5 py-3;
+  }
+  .custom-unit-input {
+    @apply py-1 px-2.5 text-black font-medium rounded-[6] border border-[#B2B2B2] border-solid;
   }
 }

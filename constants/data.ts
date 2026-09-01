@@ -135,15 +135,6 @@ export const mealTypes = [
   },
 ];
 
-export const addProductsPageButtons = [
-  {
-    label: "Skanuj kod",
-    icon: icons.scanBarcode,
-    link: "/(add-product)/scan-bar-code",
-  },
-  { label: "Utwórz", icon: icons.addProduct, link: "/(tabs)" },
-];
-
 export const passwordRequirements = [
   "Co najmniej 8 znaków",
   "Co najmniej jedna wielka litera",

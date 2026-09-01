@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { apiFetch } from "../lib/interceptor";
 import { formatDate2 } from "../lib/utils";
 
-const ProductsListItem = ({ id, name, weight_g, kcal, mealType }: any) => {
+const ProductsListItem = ({ id, name, weight_g, kcal, mealType, packaging }: any) => {
   const parsedWeight = parseFloat(weight_g);
   const parsedKcal = parseFloat(kcal);
   const MEAL_TYPES_MAP = {
@@ -53,7 +53,7 @@ const ProductsListItem = ({ id, name, weight_g, kcal, mealType }: any) => {
             {truncate(name, 35)}
           </Text>
           <Text className="text-grey-secondary font-light text-[12px]">
-            {parsedWeight}g
+            {packaging} {parsedWeight}g
           </Text>
         </View>
         <View className="flex-row items-center gap-3">

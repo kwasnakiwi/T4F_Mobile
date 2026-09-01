@@ -4,9 +4,11 @@ import {
   ActivityIndicator,
   FlatList,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { apiFetch } from "../lib/interceptor";
 import { formatDate2 } from "../lib/utils";
 
@@ -58,13 +60,18 @@ interface ProductDetails {
 }
 
 const AddProductAdv = () => {
-  const { itemId, mealType } = useLocalSearchParams<{
+  const { itemId, mealType, barcodeProductId } = useLocalSearchParams<{
     itemId?: string;
     mealType?: string;
+    barcodeProductId?: string;
   }>();
+  const insets = useSafeAreaInsets();
   const [productData, setProductData] = useState<ProductDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isDetailsExpanded, setIsDetailsExpanded] = useState<boolean>(true);
+
+  const [customWeightG, setCustomWeightG] = useState("0");
+  const [customUnitLabel, setCustomUnitLabel] = useState("");
 
   const MEAL_TYPES_MAP = {
     Śniadanie: 1,
@@ -75,12 +82,14 @@ const AddProductAdv = () => {
   };
 
   useEffect(() => {
-    if (!itemId) return;
+    if (!itemId && !barcodeProductId) return;
 
     const getProductData = async () => {
       try {
         setLoading(true);
-        const res = await apiFetch(`diet/products/${itemId}/`);
+        const res = await apiFetch(
+          `diet/products/${barcodeProductId || itemId}/`,
+        );
 
         if (!res.ok) {
           const errorText = await res.text();
@@ -106,10 +115,13 @@ const AddProductAdv = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product_id: itemId,
+          product_id: barcodeProductId || itemId,
           date: formatDate2(new Date()),
           //@ts-ignore
           meal_type: MEAL_TYPES_MAP[mealType],
+          custom_weight_g:
+            parseFloat(customWeightG) === 0 ? null : parseFloat(customWeightG),
+          custom_unit_label: customUnitLabel,
         }),
       });
 
@@ -176,6 +188,7 @@ const AddProductAdv = () => {
         data={[]}
         renderItem={null}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         ListHeaderComponent={
           <>
             <View className="default-panel m-3">
@@ -392,17 +405,37 @@ const AddProductAdv = () => {
                 </View>
               </View>
             )}
-            <TouchableOpacity
-              onPress={addProduct}
-              className="w-[200] mx-auto py-1.5 px-2.5 rounded-[50] bg-primary"
-            >
-              <Text className="text-center text-white font-medium text-[12px]">
-                + Dodaj do posiłku
-              </Text>
-            </TouchableOpacity>
           </>
         }
       />
+      <View className="bottom-unit-inputs absolute bottom-0 left-0">
+        <TouchableOpacity
+          onPress={addProduct}
+          className="w-[200] mx-auto py-1.5 px-2.5 rounded-[50] bg-primary"
+        >
+          <Text className="text-center text-white font-medium text-[12px]">
+            + Dodaj do posiłku
+          </Text>
+        </TouchableOpacity>
+        <View
+          className="custom-unit-inputs"
+          style={{ paddingBottom: 12 + insets.bottom }}
+        >
+          <TextInput
+            value={customWeightG}
+            className="custom-unit-input w-full max-w-[50]"
+            onChangeText={setCustomWeightG}
+            keyboardType="numeric"
+          />
+          <TextInput
+            value={customUnitLabel}
+            className="custom-unit-input flex-1"
+            onChangeText={setCustomUnitLabel}
+            placeholder="Porcja..."
+            placeholderTextColor="#888888"
+          />
+        </View>
+      </View>
     </View>
   );
 };
