@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AppHeader from "../components/AppHeader";
 import { BASE_URL } from "../lib/utils";
 
 const SignUp = () => {
@@ -66,6 +67,7 @@ const SignUp = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Zarejestruj się" />
       <FlatList
         data={[]}
         renderItem={null}
@@ -87,6 +89,7 @@ const SignUp = () => {
                 className="auth-input pl-12"
                 value={name}
                 onChangeText={setName}
+                placeholderTextColor="#aab4bf"
                 placeholder="np. Jan"
                 placeholderClassName="text-grey-secondary text-[14px]"
               />
@@ -98,6 +101,7 @@ const SignUp = () => {
                 className="auth-input pl-12"
                 value={email}
                 onChangeText={setEmail}
+                placeholderTextColor="#aab4bf"
                 placeholder="np. jan.kowalski@gmail.com"
                 placeholderClassName="text-grey-secondary text-[14px]"
               />
@@ -111,6 +115,7 @@ const SignUp = () => {
                 onChangeText={setPassword}
                 placeholder="Wprowadź hasło"
                 placeholderClassName="text-black text-[14px]"
+                placeholderTextColor="#aab4bf"
                 secureTextEntry={isSecure}
                 onFocus={() => setPasswordInputFocus(true)}
                 onBlur={() => setPasswordInputFocus(false)}
@@ -147,6 +152,7 @@ const SignUp = () => {
                 className="auth-input pl-12"
                 value={repeatedPassword}
                 onChangeText={setRepeatedPassword}
+                placeholderTextColor="#aab4bf"
                 placeholder="Powtórz hasło"
                 placeholderClassName="text-grey-secondary text-[14px]"
                 secureTextEntry={isSecure}

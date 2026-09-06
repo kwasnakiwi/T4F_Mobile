@@ -3,7 +3,6 @@ import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { View } from "react-native";
-import AppHeader from "./components/AppHeader";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,7 +26,6 @@ export default function RootLayout() {
 
   return (
     <View style={{ flex: 1 }} className="home-page-container">
-      <AppHeader />
       <View style={{ flex: 1 }}>
         <Slot />
       </View>

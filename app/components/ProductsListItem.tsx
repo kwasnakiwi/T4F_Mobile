@@ -3,7 +3,15 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { apiFetch } from "../lib/interceptor";
 import { formatDate2 } from "../lib/utils";
 
-const ProductsListItem = ({ id, name, weight_g, kcal, mealType, packaging }: any) => {
+const ProductsListItem = ({
+  id,
+  name,
+  weight_g,
+  kcal,
+  mealType,
+  packaging,
+  currentDate,
+}: any) => {
   const parsedWeight = parseFloat(weight_g);
   const parsedKcal = parseFloat(kcal);
   const MEAL_TYPES_MAP = {
@@ -26,7 +34,7 @@ const ProductsListItem = ({ id, name, weight_g, kcal, mealType, packaging }: any
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product_id: id,
-          date: formatDate2(new Date()),
+          date: formatDate2(currentDate),
           //@ts-ignore
           meal_type: MEAL_TYPES_MAP[mealType],
         }),
@@ -39,7 +47,10 @@ const ProductsListItem = ({ id, name, weight_g, kcal, mealType, packaging }: any
         return;
       }
 
-      router.push("/(tabs)");
+      router.push({
+        pathname: "/(tabs)",
+        params: { currentDate: currentDate },
+      });
     } catch (err) {
       console.log(err);
     }

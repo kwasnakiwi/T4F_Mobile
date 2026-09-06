@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "scheme": "t4fmobile",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
@@ -17,7 +17,8 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "time_4.fit"
+      "package": "time_4.fit",
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "output": "static"
@@ -30,7 +31,12 @@
           "cameraPermission": "Aplikacja potrzebuje dostępu do kamery, aby skanować kody kreskowe produktów."
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font",
+      "expo-image",
+      "expo-splash-screen",
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

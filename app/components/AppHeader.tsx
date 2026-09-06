@@ -1,8 +1,11 @@
-import { tabs } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import clsx from "clsx";
-import { useGlobalSearchParams, usePathname, useRouter } from "expo-router";
-import { useState } from "react";
+import {
+  Link,
+  useGlobalSearchParams,
+  usePathname,
+  useRouter,
+} from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { formatDate, getWeekDays } from "../lib/utils";
@@ -11,6 +14,16 @@ const customTitles: Record<string, string> = {
   "scan-bar-code": "Skanuj kod kreskowy",
   "add-product": "Szczegóły produktu",
 };
+
+const AUTH_TITLES = new Set([
+  "Zaloguj się",
+  "Zarejestruj się",
+  "Weryfikacja 2-etapowa",
+  "Zapomniałem hasła",
+  "Stwórz nowe hasło",
+  "Otrzymano maila",
+  "Zmieniono hasło",
+]);
 
 const getDateLabel = (inputDate: Date | string): string => {
   const date = new Date(inputDate);
@@ -30,75 +43,39 @@ const getDateLabel = (inputDate: Date | string): string => {
   return `${Math.abs(diffInDays)} dni temu`;
 };
 
-const AppHeader = () => {
+interface AppHeaderProps {
+  tabTitle: string;
+  selectedDate?: Date;
+  setSelectedDate?: (newDate: Date) => void;
+}
+
+const AppHeader = ({
+  tabTitle,
+  selectedDate = new Date(),
+  setSelectedDate,
+}: AppHeaderProps) => {
   const pathname = usePathname();
   const globalParams = useGlobalSearchParams();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const insets = useSafeAreaInsets();
-  const days = getWeekDays(selectedDate);
   const router = useRouter();
+
+  const days = getWeekDays(selectedDate);
 
   const pathSegments = pathname.split("/").filter(Boolean);
   const rawLastSegment = pathSegments[pathSegments.length - 1] || "";
   const lastSegment = decodeURIComponent(rawLastSegment);
 
-  const currentTabName = pathname.replace("/", "") || "index";
-  const activeTab = tabs.find((tab) => tab.name === currentTabName);
+  const isScanning = lastSegment === "scan-bar-code";
+  const isHome = tabTitle === "Home";
+  const isSignIn = tabTitle === "Zaloguj się";
+  const isAuthView = AUTH_TITLES.has(tabTitle);
+  const isSubpage = !isHome && !isScanning && !isAuthView;
 
-  const getHeaderTitle = () => {
-    if (activeTab) return activeTab.title;
-
-    const dynamicParam = (globalParams.type || globalParams.name) as string;
-    if (dynamicParam) {
-      return decodeURIComponent(dynamicParam);
-    }
-
-    if (customTitles[lastSegment]) return customTitles[lastSegment];
-
-    if (lastSegment) {
-      const formatted = lastSegment.replace(/-/g, " ");
-      return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-    }
-
-    return "Home";
-  };
-
-  const title = getHeaderTitle();
-  const scanning = lastSegment === "scan-bar-code";
-  const isHome = title === "Home";
-  const isSignIn = title === "Sign in";
-  const isSignUp = title === "Sign up";
-  const is2fa = title === "2fa";
-  const isForgotPassword = title === "Forgot password";
-  const isCreateNewPassword = title === "Create new password";
-  const isForgotPassword2 = title === "Forgot password got email";
-  const isPasswordChanged = title === "Password changed";
-  const isSubpage =
-    !isHome &&
-    !scanning &&
-    !isSignIn &&
-    !isSignUp &&
-    !is2fa &&
-    !isForgotPassword &&
-    !isCreateNewPassword &&
-    !isForgotPassword2 &&
-    !isPasswordChanged;
+  const shouldDisableRadius = isScanning || isSubpage || isAuthView;
 
   return (
     <View
-      className={clsx(
-        "app-header-wrapper",
-        (scanning ||
-          isSubpage ||
-          isSignIn ||
-          isSignUp ||
-          is2fa ||
-          isForgotPassword ||
-          isCreateNewPassword ||
-          isForgotPassword2 ||
-          isPasswordChanged) &&
-          "no-radius",
-      )}
+      className={clsx("app-header-wrapper", shouldDisableRadius && "no-radius")}
       style={{ paddingTop: insets.top }}
     >
       <View
@@ -112,28 +89,38 @@ const AppHeader = () => {
             <TouchableOpacity className="app-header-panel">
               <Image source={icons.menu} />
             </TouchableOpacity>
-            <View className="flex-col items-center">
-              <Text className="app-header-title">{title}</Text>
+
+            <View className="flex-col items-center relative">
+              <Text className="app-header-title">{tabTitle}</Text>
               <Text className="app-header-desc">
                 Cześć, <Text className="orange-text">Andrzeju</Text> 👋
               </Text>
+              <Link
+                href="/(auth)/sign-in"
+                className="absolute -right-full top-[50%] translate-y-[-50%] text-white bg-primary p-1.5 rounded-[4] font-medium"
+              >
+                Zaloguj się
+              </Link>
             </View>
+
             <TouchableOpacity className="app-header-panel">
               <Image source={icons.bell} />
             </TouchableOpacity>
           </>
         )}
-        {scanning && (
+
+        {isScanning && (
           <View className="flex-row justify-center relative w-full items-center">
             <TouchableOpacity
-              onPress={() => router.push("/")}
+              onPress={() => router.push("/(tabs)")}
               className="py-4 rotate-90 absolute left-0"
             >
               <Image source={icons.angleDown} />
             </TouchableOpacity>
-            <Text className="app-header-title">{title}</Text>
+            <Text className="app-header-title">{tabTitle}</Text>
           </View>
         )}
+
         {isSubpage && (
           <View className="flex-row justify-center relative w-full items-center">
             <TouchableOpacity
@@ -142,10 +129,11 @@ const AppHeader = () => {
             >
               <Image source={icons.angleDown} className="rotate-90" />
             </TouchableOpacity>
-            <Text className="app-header-title">{title}</Text>
+            <Text className="app-header-title">{tabTitle}</Text>
           </View>
         )}
       </View>
+
       {isHome && (
         <>
           <View className="app-header-date-row">
@@ -164,7 +152,7 @@ const AppHeader = () => {
                     "app-header-selected-day",
                 )}
                 key={i}
-                onPress={() => setSelectedDate(day.date)}
+                onPress={() => setSelectedDate?.(day.date)}
               >
                 <Text className="day-name">{day.dayName}</Text>
                 <Text className="day-number">{day.dayNumber}</Text>
@@ -173,18 +161,17 @@ const AppHeader = () => {
           </View>
         </>
       )}
+
       {isSignIn && (
-        <>
-          <View className="app-sign-in-top">
-            <View className="logo-placeholder" />
-            <Text className="logo-text">
-              Time <Text className="orange-bold">4</Text> Fit
-            </Text>
-            <Text className="logo-desc">
-              Jedno miejsce. Cały Twój aktywny styl życia
-            </Text>
-          </View>
-        </>
+        <View className="app-sign-in-top">
+          <View className="logo-placeholder" />
+          <Text className="logo-text">
+            Time <Text className="orange-bold">4</Text> Fit
+          </Text>
+          <Text className="logo-desc">
+            Jedno miejsce. Cały Twój aktywny styl życia
+          </Text>
+        </View>
       )}
     </View>
   );

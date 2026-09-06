@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AppHeader from "../components/AppHeader";
 
 const ForgotPassword = () => {
   const insets = useSafeAreaInsets();
@@ -11,6 +12,7 @@ const ForgotPassword = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Zmieniono hasło" />
       <FlatList
         data={[]}
         renderItem={null}

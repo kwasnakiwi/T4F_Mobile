@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AppHeader from "../components/AppHeader";
 import { BASE_URL } from "../lib/utils";
 
 const SignIn = () => {
@@ -46,7 +47,7 @@ const SignIn = () => {
         params: {
           challenge_id: data.challenge_id,
           purpose: data.purpose,
-          dev_code: data.dev_code
+          dev_code: data.dev_code,
         },
       });
 
@@ -60,6 +61,7 @@ const SignIn = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Zaloguj się" />
       <FlatList
         data={[]}
         renderItem={null}
@@ -80,6 +82,7 @@ const SignIn = () => {
                 value={email}
                 onChangeText={setEmail}
                 placeholder="np. jan.kowalski@gmail.com"
+                placeholderTextColor="#aab4bf"
                 placeholderClassName="text-grey-secondary text-[14px]"
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -94,7 +97,8 @@ const SignIn = () => {
                 value={password}
                 onChangeText={setPassword}
                 placeholder="Wprowadź hasło"
-                placeholderClassName="text-grey-secondary text-[14px]"
+                placeholderTextColor="#aab4bf"
+                placeholderClassName="text-black text-[14px]"
                 secureTextEntry={isSecure}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -146,29 +150,6 @@ const SignIn = () => {
                   Zarejestruj się
                 </Link>
               </Text>
-            </View>
-            <View className="mt-8 pt-4 border-t border-gray-100 gap-y-2">
-              <Link href="/(auth)/2fa" className="text-tint text-xs">
-                • Weryfikacja dwuetapowa
-              </Link>
-              <Link
-                href="/(auth)/create-new-password"
-                className="text-tint text-xs"
-              >
-                • Stwórz nowe hasło
-              </Link>
-              <Link
-                href="/(auth)/forgot-password-got-email"
-                className="text-tint text-xs"
-              >
-                • Sprawdź skrzynkę odbiorczą
-              </Link>
-              <Link
-                href="/(auth)/password-changed"
-                className="text-tint text-xs"
-              >
-                • Hasło zmienione
-              </Link>
             </View>
           </>
         }

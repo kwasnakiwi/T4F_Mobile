@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BASE_URL } from "../lib/utils";
+import AppHeader from "../components/AppHeader";
 
 const ForgotPassword = () => {
   const insets = useSafeAreaInsets();
@@ -52,6 +53,7 @@ const ForgotPassword = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Zapomniałem hasła" />
       <FlatList
         data={[]}
         renderItem={null}
@@ -74,6 +76,7 @@ const ForgotPassword = () => {
                 className="auth-input pl-12"
                 value={email}
                 onChangeText={setEmail}
+                placeholderTextColor="#aab4bf"
                 placeholder="np. jan.kowalski@gmail.com"
                 placeholderClassName="text-grey-secondary text-[14px]"
               />

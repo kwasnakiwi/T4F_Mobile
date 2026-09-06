@@ -53,6 +53,7 @@ declare global {
     icon: ImageSourcePropType;
     isOpen?: boolean;
     onPress?: () => void;
+    currentDate: Date;
   }
 
   interface Product {

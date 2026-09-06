@@ -112,7 +112,7 @@ export const DynamicProgressGauge: React.FC<ProgressGaugeProps> = ({
 
 const styles = StyleSheet.create({
   textWrapper: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 30, // Przesunięcie tekstu w dół

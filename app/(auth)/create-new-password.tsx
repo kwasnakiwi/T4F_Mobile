@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AppHeader from "../components/AppHeader";
 import { saveSecureItem } from "../lib/secureStore";
 import { BASE_URL } from "../lib/utils";
 
@@ -66,6 +67,7 @@ const CreateNewPassword = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Stwórz nowe hasło" />
       <FlatList
         data={[]}
         renderItem={null}
@@ -88,6 +90,7 @@ const CreateNewPassword = () => {
                 value={password}
                 onChangeText={setPassword}
                 placeholder="Wprowadź hasło"
+                placeholderTextColor="#aab4bf"
                 placeholderClassName="text-black text-[14px]"
                 secureTextEntry={isSecure}
               />
@@ -105,6 +108,7 @@ const CreateNewPassword = () => {
                 className="auth-input pl-12"
                 value={repeatedPassword}
                 onChangeText={setRepeatedPassword}
+                placeholderTextColor="#aab4bf"
                 placeholder="Powtórz hasło"
                 placeholderClassName="text-grey-secondary text-[14px]"
                 secureTextEntry={isSecure}

@@ -11,6 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { saveSecureItem } from "../lib/secureStore";
 import { BASE_URL } from "../lib/utils";
+import AppHeader from "../components/AppHeader";
 
 const OTP_LENGTH = 6;
 
@@ -119,6 +120,7 @@ const TwoFA = () => {
 
   return (
     <View className="bg-white flex-1">
+      <AppHeader tabTitle="Weryfikacja 2-etapowa" />
       <FlatList
         data={[]}
         renderItem={null}

@@ -1,3 +1,4 @@
+import AppHeader from "@/app/components/AppHeader";
 import ProductsListItem from "@/app/components/ProductsListItem";
 import { icons } from "@/constants/icons";
 import clsx from "clsx";
@@ -14,7 +15,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AddProductsPage = () => {
-  const { name } = useLocalSearchParams();
+  const { name, currentDate } = useLocalSearchParams();
   const [search, setSearch] = useState<string>("");
   const [category, setCategory] = useState<string>("all");
   const [products, setProducts] = useState<Product[]>([]);
@@ -61,105 +62,113 @@ const AddProductsPage = () => {
   ];
 
   return (
-    <View className="home-page-container px-2.5 pt-3.5 flex-1">
-      <View className="add-product-buttons">
-        <TouchableOpacity
-          onPress={() =>
-            router.replace({
-              pathname: "/(add-product)/scan-bar-code",
-              params: { mealName: name },
-            })
-          }
-          className="add-product-button"
-        >
-          <Image source={icons.scanBarcode} />
-          <Text className="font-semibold text-secondary text-[10px]">
-            Skanuj kod
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            router.replace({
-              pathname: "/(tabs)",
-              params: { mealName: name },
-            })
-          }
-          className="add-product-button"
-        >
-          <Image source={icons.addProduct} />
-          <Text className="font-semibold text-secondary text-[10px]">
-            Utwórz
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View className="ap-search-input-box">
-        <TextInput
-          className="ap-search-input"
-          placeholder="Wyszukaj pozycji..."
-          placeholderTextColor="#AAB4BF"
-          placeholderClassName="ap-search-input-placeholder"
-          value={search}
-          onChangeText={setSearch}
-          maxLength={50}
-        />
-        <Image className="search-icon" source={icons.search} />
-      </View>
-
-      <View className="add-product-categories">
-        {categories.map((cat) => (
-          <TouchableOpacity
-            key={cat.id}
-            className={clsx(
-              "add-product-category",
-              cat.id === category && "current",
-            )}
-            onPress={() => setCategory(cat.id)}
-          >
-            <Text
-              className={clsx(
-                "add-product-category-text",
-                cat.id === category && "current",
-              )}
-            >
-              {cat.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <FlatList
-        className="ap-products-list flex-1"
-        data={products}
-        keyExtractor={(item) => item.id.toString()}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          marginTop: 16,
-          paddingBottom: insets.bottom + 150,
-        }}
-        renderItem={({ item }) => (
+    <>
+      <AppHeader tabTitle={String(name)} />
+      <View className="home-page-container px-2.5 pt-3.5 flex-1">
+        <View className="add-product-buttons">
           <TouchableOpacity
             onPress={() =>
-              router.push({
-                pathname: "/(add-product)/add-product-adv",
-                params: { itemId: item.id.toString(), mealType: name },
+              router.replace({
+                pathname: "/(add-product)/scan-bar-code",
+                params: { mealName: name, currentDate: currentDate },
               })
             }
+            className="add-product-button"
           >
-            <ProductsListItem
-              id={item.id}
-              name={item.name}
-              weight_g={item.weight_g}
-              kcal={item.kcal}
-              mealType={name}
-              packaging={item.packaging}
-            />
+            <Image source={icons.scanBarcode} />
+            <Text className="font-semibold text-secondary text-[10px]">
+              Skanuj kod
+            </Text>
           </TouchableOpacity>
-        )}
-      />
-    </View>
+          <TouchableOpacity
+            onPress={() =>
+              router.replace({
+                pathname: "/(tabs)",
+                params: { mealName: name, currentDate: currentDate },
+              })
+            }
+            className="add-product-button"
+          >
+            <Image source={icons.addProduct} />
+            <Text className="font-semibold text-secondary text-[10px]">
+              Utwórz
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View className="ap-search-input-box">
+          <TextInput
+            className="ap-search-input"
+            placeholder="Wyszukaj pozycji..."
+            placeholderTextColor="#AAB4BF"
+            placeholderClassName="ap-search-input-placeholder"
+            value={search}
+            onChangeText={setSearch}
+            maxLength={50}
+          />
+          <Image className="search-icon" source={icons.search} />
+        </View>
+
+        <View className="add-product-categories">
+          {categories.map((cat) => (
+            <TouchableOpacity
+              key={cat.id}
+              className={clsx(
+                "add-product-category",
+                cat.id === category && "current",
+              )}
+              onPress={() => setCategory(cat.id)}
+            >
+              <Text
+                className={clsx(
+                  "add-product-category-text",
+                  cat.id === category && "current",
+                )}
+              >
+                {cat.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <FlatList
+          className="ap-products-list flex-1"
+          data={products}
+          keyExtractor={(item) => item.id.toString()}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            marginTop: 16,
+            paddingBottom: insets.bottom + 150,
+          }}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/(add-product)/add-product-adv",
+                  params: {
+                    itemId: item.id.toString(),
+                    mealType: name,
+                    currentDate: currentDate,
+                  },
+                })
+              }
+            >
+              <ProductsListItem
+                id={item.id}
+                name={item.name}
+                weight_g={item.weight_g}
+                kcal={item.kcal}
+                mealType={name}
+                packaging={item.packaging}
+                currentDate={currentDate}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </>
   );
 };
 

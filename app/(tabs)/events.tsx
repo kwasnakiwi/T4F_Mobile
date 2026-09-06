@@ -1,15 +1,19 @@
 import { Text, View } from "react-native";
+import AppHeader from "../components/AppHeader";
 
 export default function Events() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text >Events</Text>
-    </View>
+    <>
+      <AppHeader tabTitle="Events" />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Events</Text>
+      </View>
+    </>
   );
 }

@@ -1,9 +1,9 @@
 import { macros as staticMacros } from "@/constants/data";
 import { icons } from "@/constants/icons";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Link } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import AppHeader from "../components/AppHeader";
 import DynamicProgressGauge from "../components/DynamicProgressGauge";
 import HomePageMealComponent from "../components/HomePageMeal";
 import MacrosListElement from "../components/MacrosListElement";
@@ -11,7 +11,6 @@ import WaterProgressCircle from "../components/WaterProgressCircle";
 import { apiFetch } from "../lib/interceptor";
 import { formatDate2 } from "../lib/utils";
 
-// Mapowanie typów posiłków z API na nazwy i ikony
 const MEAL_TYPE_MAP: Record<number, { name: string; icon: any }> = {
   1: { name: "Śniadanie", icon: icons.breakfast },
   2: { name: "II Śniadanie", icon: icons.lunch },
@@ -21,12 +20,15 @@ const MEAL_TYPE_MAP: Record<number, { name: string; icon: any }> = {
 };
 
 export default function Index() {
-  const tabBarHeight = useBottomTabBarHeight();
   const totalGlasses = 8;
+  const { currentDate } = useLocalSearchParams();
   const [currentGlasses, setCurrentGlasses] = useState<number>(2);
   const [openMeals, setOpenMeals] = useState<number[]>([]);
   const [dailyMealsData, setDailyMealsData] = useState<any>(null);
-  const currentDate = formatDate2(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    //@ts-ignore
+    currentDate ? new Date(currentDate) : new Date(),
+  );
 
   const handleToggleMeal = (mealType: number) => {
     setOpenMeals((prev) =>
@@ -39,7 +41,9 @@ export default function Index() {
   useEffect(() => {
     const getDailyMeals = async () => {
       try {
-        const res = await apiFetch(`diet/daily-meals/?date=${currentDate}`);
+        const res = await apiFetch(
+          `diet/daily-meals/?date=${formatDate2(selectedDate)}`,
+        );
         const data = await res.json();
 
         if (!res.ok) {
@@ -53,7 +57,7 @@ export default function Index() {
     };
 
     getDailyMeals();
-  }, [currentDate]);
+  }, [selectedDate]);
 
   const currentKcal = Math.round(
     parseFloat(dailyMealsData?.total_day_kcal || "0"),
@@ -90,13 +94,18 @@ export default function Index() {
 
   return (
     <View className="bg-app-background flex-1">
+      <AppHeader
+        tabTitle="Home"
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
       <FlatList
         data={[]}
         renderItem={null}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           padding: 10,
-          paddingBottom: tabBarHeight + 16,
+          paddingBottom: 100,
         }}
         ListHeaderComponent={
           <>
@@ -195,6 +204,7 @@ export default function Index() {
                     icon={mealInfo.icon}
                     isOpen={isOpen}
                     onPress={() => handleToggleMeal(apiMeal.meal_type)}
+                    currentDate={selectedDate}
                   />
                 );
               })}
@@ -236,7 +246,6 @@ export default function Index() {
                 </TouchableOpacity>
               </View>
             </View>
-            <Link href="/(auth)/sign-in">Logowanie</Link>
           </>
         }
       />

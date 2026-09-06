@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
 interface WaterProgressCircleProps {
@@ -81,7 +81,7 @@ export const WaterProgressCircle: React.FC<WaterProgressCircleProps> = ({
 
 const styles = StyleSheet.create({
   textWrapper: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent", // Przezroczyste tło
