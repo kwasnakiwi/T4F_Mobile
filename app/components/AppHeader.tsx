@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { useMe } from "@/context/AuthContext";
 import clsx from "clsx";
 import {
   Link,
@@ -73,6 +74,8 @@ const AppHeader = ({
 
   const shouldDisableRadius = isScanning || isSubpage || isAuthView;
 
+  const { user, loading, refetchMe } = useMe();
+
   return (
     <View
       className={clsx("app-header-wrapper", shouldDisableRadius && "no-radius")}
@@ -93,14 +96,20 @@ const AppHeader = ({
             <View className="flex-col items-center relative">
               <Text className="app-header-title">{tabTitle}</Text>
               <Text className="app-header-desc">
-                Cześć, <Text className="orange-text">Andrzeju</Text> 👋
+                Cześć,{" "}
+                <Text className="orange-text">
+                  {user?.profile?.name || "User"}
+                </Text>{" "}
+                👋
               </Text>
-              <Link
-                href="/(auth)/sign-in"
-                className="absolute -right-full top-[50%] translate-y-[-50%] text-white bg-primary p-1.5 rounded-[4] font-medium"
-              >
-                Zaloguj się
-              </Link>
+              {!user && (
+                <Link
+                  href="/(auth)/sign-in"
+                  className="absolute -right-full top-[50%] translate-y-[-50%] text-white bg-primary p-1.5 rounded-[4] font-medium"
+                >
+                  Zaloguj się
+                </Link>
+              )}
             </View>
 
             <TouchableOpacity className="app-header-panel">

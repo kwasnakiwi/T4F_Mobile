@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/AuthContext";
 import "@/global.css";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
@@ -25,10 +26,12 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <View style={{ flex: 1 }} className="home-page-container">
-      <View style={{ flex: 1 }}>
-        <Slot />
+    <AuthProvider>
+      <View style={{ flex: 1 }} className="home-page-container">
+        <View style={{ flex: 1 }}>
+          <Slot />
+        </View>
       </View>
-    </View>
+    </AuthProvider>
   );
 }

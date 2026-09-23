@@ -2,7 +2,7 @@
   "expo": {
     "name": "T4F_Mobile",
     "slug": "T4F_Mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "scheme": "t4fmobile",
     "userInterfaceStyle": "automatic",

@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { useMe } from "@/context/AuthContext";
 import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
@@ -20,6 +21,7 @@ const SignIn = () => {
   const [password, setPassword] = useState<string>("");
   const [isSecure, setIsSecure] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { user } = useMe();
 
   const toggleSecure = () => {
     setIsSecure((prev) => !prev);
@@ -58,6 +60,8 @@ const SignIn = () => {
       setIsLoading(false);
     }
   };
+
+  if (user) router.replace("/(tabs)");
 
   return (
     <View className="bg-white flex-1">
