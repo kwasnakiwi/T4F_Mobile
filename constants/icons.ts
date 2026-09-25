@@ -15,6 +15,10 @@ import greyAngleUp from "@/assets/icons/greyAngleUp.png";
 import greyGlass from "@/assets/icons/greyGlass.png";
 import lunch from "@/assets/icons/lunch.png";
 import menu from "@/assets/icons/menu.png";
+import orangeApple from "@/assets/icons/orangeApple.png";
+import orangeBin from "@/assets/icons/orangeBin.png";
+import orangeBolt from "@/assets/icons/orangeBolt.png";
+import orangeBook from "@/assets/icons/orangeBook.png";
 import orangeGlass from "@/assets/icons/orangeGlass.png";
 import protein from "@/assets/icons/protein.png";
 import salt from "@/assets/icons/salt.png";
@@ -58,4 +62,8 @@ export const icons = {
   authPerson,
   bigEnvelope,
   bigCheck,
+  orangeApple,
+  orangeBin,
+  orangeBolt,
+  orangeBook,
 } as const;

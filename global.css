@@ -510,4 +510,31 @@
   .custom-unit-input {
     @apply py-1 px-2.5 text-black font-medium rounded-[6] border border-[#B2B2B2] border-solid;
   }
+  .add-menu-back-overlay {
+    @apply absolute inset-0 bg-black/50 z-40;
+  }
+  .add-menu {
+    @apply absolute bottom-0 left-0 right-0 w-full bg-white rounded-t-2xl p-5 z-50;
+  }
+  .add-menu-options {
+    @apply mt-4 flex-col gap-y-2;
+  }
+  .add-option {
+    @apply flex-row items-center gap-3.5 px-3.5 py-2 bg-[#f7f9fb] border border-solid border-[#eff0f4] rounded-[14];
+  }
+  .make-product-label {
+    @apply color-muted font-semibold text-[12px] mb-2;
+  }
+  .make-product-input {
+    @apply py-[7.5] px-2.5 bg-grey-muted text-[12px] rounded-[6];
+  }
+  .make-product-field {
+    @apply flex-row items-center w-full gap-3 border-b border-solid border-[#9ca3af3f] pb-3 pt-1;
+  }
+  .make-product-field-name {
+    @apply text-tint font-light text-[12px];
+  }
+  .make-product-field-unit {
+    @apply text-grey-secondary font-light text-[12px];
+  }
 }

@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,6 +20,7 @@ const AddProductsPage = () => {
   const [search, setSearch] = useState<string>("");
   const [category, setCategory] = useState<string>("all");
   const [products, setProducts] = useState<Product[]>([]);
+  const [showBottomBar, setShowBottomBar] = useState(false);
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -61,8 +63,93 @@ const AddProductsPage = () => {
     { id: "created_by_me", label: "Stworzone przeze mnie" },
   ];
 
+  const addOptions = [
+    {
+      title: "Szybkie dodanie",
+      desc: "Jednorazowe dodanie bez tworzenia produktu",
+      icon: icons.orangeBolt,
+      route: {
+        pathname: "/(add-product)/quick-add",
+        params: { name: name, currentDate: currentDate },
+      },
+    },
+    {
+      title: "Produkt",
+      desc: "Utwórz własny produkt spożywczy",
+      icon: icons.orangeApple,
+      route: {
+        pathname: "/(add-product)/quick-add",
+        params: { name: name, currentDate: currentDate },
+      },
+    },
+    {
+      title: "Nowa potrawa",
+      desc: "Produkty które często jesz razem",
+      icon: icons.orangeBin,
+      route: {
+        pathname: "/(add-product)/quick-add",
+        params: { name: name, currentDate: currentDate },
+      },
+    },
+    {
+      title: "Nowy przepis",
+      desc: "Posiłki z instrukcjami przyrządzenia",
+      icon: icons.orangeBook,
+      route: {
+        pathname: "/(add-product)/quick-add",
+        params: { name: name, currentDate: currentDate },
+      },
+    },
+  ];
+
   return (
     <>
+      {showBottomBar && (
+        <>
+          <TouchableWithoutFeedback
+            onPress={() => setShowBottomBar(false)}
+            className="absolute inset-0 z-40"
+          >
+            <View
+              className="add-menu-back-overlay"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            />
+          </TouchableWithoutFeedback>
+          <View
+            className="add-menu"
+            style={{ paddingBottom: 20 + insets.bottom }}
+          >
+            <Text className="font-semibold color-secondary">
+              Co chcesz utworzyć?
+            </Text>
+            <Text className="font-light color-grey-secondary text-[12px]">
+              Wybierz typ tworzonego elementu
+            </Text>
+            <View className="add-menu-options">
+              {addOptions.map((opt, i) => (
+                <TouchableOpacity
+                  //@ts-ignore
+                  onPress={() => router.push(opt.route)}
+                  key={i}
+                  className="add-option"
+                >
+                  <View className="w-5">
+                    <Image source={opt.icon} />
+                  </View>
+                  <View className="flex-col gap-y-1">
+                    <Text className="font-semibold color-secondary text-[14px]">
+                      {opt.title}
+                    </Text>
+                    <Text className="color-tint text-[10px] font-light">
+                      {opt.desc}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </>
+      )}
       <AppHeader tabTitle={String(name)} />
       <View className="home-page-container px-2.5 pt-3.5 flex-1">
         <View className="add-product-buttons">
@@ -81,12 +168,7 @@ const AddProductsPage = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              router.replace({
-                pathname: "/(tabs)",
-                params: { mealName: name, currentDate: currentDate },
-              })
-            }
+            onPress={() => setShowBottomBar(true)}
             className="add-product-button"
           >
             <Image source={icons.addProduct} />
