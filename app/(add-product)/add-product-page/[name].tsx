@@ -78,7 +78,7 @@ const AddProductsPage = () => {
       desc: "Utwórz własny produkt spożywczy",
       icon: icons.orangeApple,
       route: {
-        pathname: "/(add-product)/quick-add",
+        pathname: "/(add-product)/create-product",
         params: { name: name, currentDate: currentDate },
       },
     },
@@ -129,7 +129,7 @@ const AddProductsPage = () => {
               {addOptions.map((opt, i) => (
                 <TouchableOpacity
                   //@ts-ignore
-                  onPress={() => router.push(opt.route)}
+                  onPress={() => router.replace(opt.route)}
                   key={i}
                   className="add-option"
                 >
